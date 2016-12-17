@@ -11,18 +11,20 @@ var geoFire = new GeoFire(ref);
 router.post('/',function(req,res){
   var arr = [];
   var geoQuery = geoFire.query({
-    center: [parseFloat(req.body.latitude), parseFloat(req.body.longitude)],
-    radius: parseFloat(req.body.radius)
+    center: [req.body.latitude,req.body.longitude],
+    radius: req.body.radius
   });
   var onReadyRegistration = geoQuery.on("ready", function() {
     console.log("GeoQuery has loaded and fired all other events for initial data");
     console.log(arr);
+    var fRes = [];
     var cursor = Food.find({_id:{"$in":arr}}).cursor();
     cursor.on("data",function(doc){
       console.log(doc);
+      fRes.push(doc);
     });
     cursor.on("close",function(){
-
+      res.send(fRes);
     });
   });
   var onKeyEnteredRegistration = geoQuery.on("key_entered", function(key, location, distance) {
