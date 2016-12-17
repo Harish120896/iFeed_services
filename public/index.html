@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Index</title>
+  </head>
+  <body>
+    <form action="/postFeed" method="post">
+        <div>
+            <label>Name:</label>
+            <input type="text" name="name"/>
+        </div>
+        <div>
+            <label>Quantity:</label>
+            <input type="text" name="quantity"/>
+        </div>
+        <div>
+            <label>Latitude:</label>
+            <input type="text" name="latitude"/>
+        </div>
+        <div>
+            <label>Longitude:</label>
+            <input type="text" name="longitude"/>
+        </div>
+        <div>
+            <label>Uid:</label>
+            <input type="text" name="uid"/>
+        </div>
+        <div>
+            <input type="submit" value="Feed"/>
+        </div>
+      </form>
+      <form action="/assignFeed" method="post">
+          <div>
+              <label>Zipcode:</label>
+              <input type="text" name="zipcode"/>
+          </div>
+          <div>
+              <input type="submit" value="Feed"/>
+          </div>
+        </form>
+  </body>
+</html>
