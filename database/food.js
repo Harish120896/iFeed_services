@@ -6,8 +6,9 @@ var Food = new Schema({
     quantity: { type: String, required: true },
     latitude: { type: String, required: true},
     longitude: { type: String, required: true},
-    zipcode: { type: String, required: true},
-    uid: { type: String, required: true}
+    time: { type: String, required: true},
+    uid: { type: String, required: true},
+    address: { type: String, required: true}
 });
 
 module.exports = mongoose.model('Food', Food);
