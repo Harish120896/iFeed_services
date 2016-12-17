@@ -30,6 +30,10 @@ app.use('/postFeed',postFeed);
 var assignFeed = require('./services/assignFeed.js');
 app.use('/assignFeed',assignFeed);
 
+// assignFeed route
+var fetchFeed = require('./services/fetchFeed.js');
+app.use('/fetchFeed',fetchFeed);
+
 app.listen(3000,function(){
     console.log("App running on 3000");
 
