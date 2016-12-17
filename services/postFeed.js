@@ -5,6 +5,8 @@ var Food = require('../database/food.js');
 var Zipped = require('../database/zipped.js');
 
 function displayPostcode(address) {
+  console.log("dp called");
+  console.log(address);
   for (p = address.length-1; p >= 0; p--) {
     if (address[p].types.indexOf("postal_code") != -1) {
        console.log(address[p].long_name);
@@ -14,57 +16,35 @@ function displayPostcode(address) {
 }
 
 router.post('/',function(req,res){
+
   // Reverse Geocoding
   geocoder.reverseGeocode( req.body.latitude, req.body.longitude, function ( err, data ) {
     // do something with data
     //console.log(data.results[0]);
-    var zipVal = displayPostcode(data.results[0].address_components);
-    console.log("Pin::" + zipVal);
-    Zipped.findOne({ zipcode: zipVal }, function( err, data ){
-      if(err){
-        console.log("Err1");
-        console.log(err);
-      }
+    var addr = data.results[0].formatted_address;
       var result;
       var food = Food();
-      food.zipcode = zipVal;
+
+      food.quantity = req.body.quantity;
       food.latitude = req.body.latitude;
       food.longitude = req.body.longitude;
       food.name = req.body.name;
-      food.quantity = req.body.quantity;
       food.uid = req.body.uid;
+      food.time = req.body.time;
+      food.address = addr;
       food.save(function(err,data1){
         if(err){
           console.log(err);
         }
         console.log(data1);
         result = data1;
-      });
-      if(data){
-        console.log("Err2");
-        data.locations.push({latitude:req.body.latitude,longitude:req.body.longitude,uid:req.body.uid});
-      } else {
-        console.log("Err3");
-        var zipped = Zipped();
-        zipped.zipcode = zipVal;
-        zipped.locations.push({latitude:req.body.latitude,longitude:req.body.longitude,uid:req.body.uid});
-        zipped.save(function(err){
-          if(err){
-            console.log(err);
-          }
+        geoFire.set(data1._id, [food.latitude, food.longitude]).then(function() {
+          console.log("Provided key has been added to GeoFire");
+        }, function(error) {
+          console.log("Error: " + error);
         });
-      }
+      });
     });
-    // Food.findOne({ zipcode: zipVal }, function( err, data ){
-    //   if(err){
-    //     console.log(err);
-    //   }
-    //   if(data){
-    //     console.log(data);
-    //   }
-    //
-    // });
-  });
   console.log(req.body);
 });
 
