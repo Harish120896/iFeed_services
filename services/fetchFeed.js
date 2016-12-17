@@ -17,6 +17,13 @@ router.post('/',function(req,res){
   var onReadyRegistration = geoQuery.on("ready", function() {
     console.log("GeoQuery has loaded and fired all other events for initial data");
     console.log(arr);
+    var cursor = Food.find({_id:{"$in":arr}}).cursor();
+    cursor.on("data",function(doc){
+      console.log(doc);
+    });
+    cursor.on("close",function(){
+
+    });
   });
   var onKeyEnteredRegistration = geoQuery.on("key_entered", function(key, location, distance) {
     console.log(key + " entered query at " + location + " (" + distance + " km from center)");
